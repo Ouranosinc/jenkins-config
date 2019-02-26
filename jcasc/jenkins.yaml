@@ -1,0 +1,82 @@
+plugins:
+  sites:
+  - id: "default"
+    url: "https://updates.jenkins.io/update-center.json"
+jenkins:
+  agentProtocols:
+  - "JNLP4-connect"
+  - "Ping"
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: true
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: false
+  disableRememberMe: false
+  mode: NORMAL
+  nodes:
+  - permanent:
+      labelString: "linux docker"
+      launcher:
+        sSHLauncher:
+          credentialsId: "id_rsa_jenkins"
+          host: "slave"
+          launchTimeoutSeconds: 210
+          maxNumRetries: 10
+          port: 22
+          retryWaitTime: 15
+          sshHostKeyVerificationStrategy:
+            manuallyTrustedKeyVerificationStrategy:
+              requireInitialManualTrust: false
+      name: "linux1"
+      mode: NORMAL
+      numExecutors: 4
+      remoteFS: "/home/jenkins/agent"
+  numExecutors: 0
+  primaryView:
+    all:
+      name: "all"
+  quietPeriod: 5
+  scmCheckoutRetryCount: 0
+  securityRealm:
+    local:
+      allowsSignup: true
+      enableCaptcha: false
+      users:
+      - id: "admin"
+        password: ${ADMIN_PASSWD}  # Env var
+  slaveAgentPort: 50000
+  views:
+  - all:
+      name: "all"
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - basicSSHUserPrivateKey:
+          description: "private id_rsa_jenkins to connect to worker"
+          id: "id_rsa_jenkins"
+          privateKeySource:
+            directEntry:
+              privateKey: ${SSH_PRIVATE_KEY}  # Load from Environment Variable
+          scope: SYSTEM
+          username: "jenkins"
+security:
+  remotingCLI:
+    enabled: false
+unclassified:
+  location:
+    url: "${HTTP_PROTO}://${HOSTNAME}:${HOSTPORT}/"  # Env var
+tool:
+  git:
+    installations:
+    - home: "git"
+      name: "Default"
+  jdk:
+    defaultProperties:
+    - installSource:
+        installers:
+        - jdkInstaller:
+            acceptLicense: false
+
+# vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2

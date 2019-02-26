@@ -1,0 +1,37 @@
+version: '2'
+services:
+  master:
+    image: pavics/jenkins-master:2.150.3.190226
+    hostname: jenkins_master
+    ports:
+      - "${JENKINS_MASTER_PORT}:8080"
+    volumes:
+      - master_home:/var/jenkins_home
+      - ./jcasc:/jcasc:ro
+    environment:
+      - CASC_JENKINS_CONFIG=/jcasc/
+      - SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}
+      - ADMIN_PASSWD=$JENKINS_ADMIN_PASSWD
+      - HTTP_PROTO=$JENKINS_HTTP_PROTO
+      - HOSTNAME=$JENKINS_HOSTNAME
+      - HOSTPORT=$JENKINS_MASTER_PORT
+    links:
+      - slave
+    restart: always
+
+  slave:
+    image: pavics/jenkins-ssh-slave:190226
+    hostname: jenkins_slave
+    volumes:
+      - slave_home:/home/jenkins
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JENKINS_SLAVE_SSH_PUBKEY=$JENKINS_SLAVE_SSH_PUBKEY
+      - DOCKER_GROUP_ON_HOST=$DOCKER_GROUP_ON_HOST
+    restart: always
+
+volumes:
+  master_home: {}
+  slave_home: {}
+
+# vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2

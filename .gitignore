@@ -1,2 +1,5 @@
 # vim temp files
 *.swp
+
+# instantiated config
+env.local
