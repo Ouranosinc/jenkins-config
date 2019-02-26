@@ -41,6 +41,14 @@ fi
 #    cat $FILE | envsubst "$VARS" > $DEST
 #  done
 
+# create volume outside of docker-compose.yml to prevent
+# `docker-compose down -v` to delete the volume.
+# if volume already exist, this call will do nothing
+if [[ $1 == "up" ]]; then
+  docker volume create jenkins_master_home
+  docker volume create jenkins_slave_home
+fi
+
 docker-compose "$@"
 ERR=$?
 
