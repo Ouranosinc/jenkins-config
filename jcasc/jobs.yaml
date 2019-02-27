@@ -1,0 +1,64 @@
+jobs:
+  - script: >
+      folder('demojobs')
+  - script: >
+      pipelineJob('demojobs/pipeline-job-directly-on-slave') {
+        definition {
+          cps {
+            sandbox()
+            script("""\
+              pipeline {
+                agent any
+                stages {
+                  stage ('test') {
+                    steps {
+                      echo "hello"
+                      sh ("env; pwd; hostname -A; hostname -f; hostname -I; uname -a")
+                    }
+                  }
+                }
+              }""".stripIndent())
+          }
+        }
+      }
+
+  - script: >
+      job('demojobs/freestyle-job-directly-on-slave') {
+        logRotator(-1, 10)
+        scm {
+          github('Ouranosinc/pyPavicsTestWorkflow', 'master')
+        }
+        triggers {
+          githubPush()
+        }
+        steps {
+          shell('ls -la')
+        }
+      }
+
+  - script: >
+      pipelineJob('demojobs/committed-pipeline-job-lauching-docker-build-env') {
+        definition {
+          cpsScm {
+            scriptPath 'Jenkinsfile'
+            scm {
+              git {
+                remote {
+                  url('https://github.com/tlvu/jenkins-piplelinejob-sample.git')
+                }
+                branch('master')
+                extensions {
+                  cleanAfterCheckout()
+                }
+              }
+            }
+            lightweight true
+          }
+        }
+        triggers {
+          // continuous builds triggered by commit hook so no polling scm
+          scm('')
+        }
+      }
+
+# vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2
