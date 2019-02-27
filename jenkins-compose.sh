@@ -45,8 +45,8 @@ fi
 # `docker-compose down -v` to delete the volume.
 # if volume already exist, this call will do nothing
 if [[ $1 == "up" ]]; then
-  docker volume create jenkins_master_home
-  docker volume create jenkins_slave_home
+  docker volume create jenkins_master_home_$JENKINS_MASTER_PORT
+  docker volume create jenkins_slave_home_$JENKINS_MASTER_PORT
 fi
 
 docker-compose "$@"

@@ -33,9 +33,9 @@ services:
 volumes:
   master_home:
     external:
-      name: jenkins_master_home
+      name: jenkins_master_home_$JENKINS_MASTER_PORT
   slave_home:
     external:
-      name: jenkins_slave_home
+      name: jenkins_slave_home_$JENKINS_MASTER_PORT
 
 # vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2
