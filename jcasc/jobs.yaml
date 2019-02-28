@@ -1,0 +1,26 @@
+jobs:
+  - script: >
+      multibranchPipelineJob('PAVICS-e2e-workflow-tests') {
+        branchSources {
+          git {
+            remote('https://github.com/Ouranosinc/PAVICS-e2e-workflow-tests.git')
+          }
+        }
+        orphanedItemStrategy {
+          discardOldItems {
+            // keep 5 last branches only
+            numToKeep(5)
+          }
+        }
+        triggers {
+          // trigger scan multibranch pipeline every day (60 mins * 24h = 1440 mins)
+          periodic(1440)
+        }
+        factory {
+          workflowBranchProjectFactory {
+            scriptPath('Jenkinsfile')
+          }
+        }
+      }
+
+# vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2
