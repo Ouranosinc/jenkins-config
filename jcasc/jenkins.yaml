@@ -30,7 +30,7 @@ jenkins:
               requireInitialManualTrust: false
       name: "linux1"
       mode: NORMAL
-      numExecutors: 4
+      numExecutors: ${NUM_EXECUTORS}  # Env var
       remoteFS: "/home/jenkins/agent"
   numExecutors: 0
   primaryView:

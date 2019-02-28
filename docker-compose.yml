@@ -15,6 +15,7 @@ services:
       - HTTP_PROTO=$JENKINS_HTTP_PROTO
       - HOSTNAME=$JENKINS_HOSTNAME
       - HOSTPORT=$JENKINS_MASTER_PORT
+      - NUM_EXECUTORS=$JENKINS_NUM_EXECUTORS_LOCAL
     links:
       - slave
     restart: always
