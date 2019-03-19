@@ -61,6 +61,17 @@ credentials:
               privateKey: ${SSH_PRIVATE_KEY}  # Load from Environment Variable
           scope: SYSTEM
           username: "jenkins"
+      - usernamePassword:
+          description: "ESGF authentication username password"
+          id: "esgf_auth"
+          password: ${ESGF_AUTH_PASSWORD}
+          scope: GLOBAL
+          username: ${ESGF_AUTH_USERNAME}
+      - string:
+          description: "ESGF authentication token"
+          id: "esgf_auth_token"
+          scope: GLOBAL
+          secret: ${ESGF_AUTH_TOKEN}
 security:
   remotingCLI:
     enabled: false
