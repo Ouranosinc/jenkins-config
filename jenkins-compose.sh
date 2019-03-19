@@ -7,7 +7,7 @@ NORMAL=$(tput sgr0)
 # list of all variables to be substituted in templates
 VARS='$JENKINS_MASTER_PORT $SSH_PRIVATE_KEY $JENKINS_ADMIN_PASSWD $JENKINS_HTTP_PROTO $JENKINS_HOSTNAME $JENKINS_SLAVE_SSH_PUBKEY $JENKINS_NUM_EXECUTORS_LOCAL'
 
-export DOCKER_GROUP_ON_HOST="`getent group |grep docker | awk -F: '{print $3}'`"
+export DOCKER_GROUP_ON_HOST="`getent group |grep docker: | awk -F: '{print $3}'`"
 
 # we switch to the real directory of the script, so it still works when used from $PATH
 # tip: ln -s /path/to/pavics-compose.sh ~/bin/
