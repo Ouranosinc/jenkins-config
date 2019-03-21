@@ -77,7 +77,10 @@ security:
     enabled: false
 unclassified:
   location:
+    adminAddress: "Jenkins <noreply@ouranos.ca>"  # from field for mail from Jenkins
     url: "${HTTP_PROTO}://${HOSTNAME}:${HOSTPORT}/"  # Env var
+  extendedEmailPublisher:
+    allowUnregisteredEnabled: true
 tool:
   git:
     installations:
