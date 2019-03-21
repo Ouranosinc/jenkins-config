@@ -7,7 +7,7 @@ services:
       - "${JENKINS_MASTER_PORT}:8080"
     volumes:
       - master_home:/var/jenkins_home
-      - ./jcasc:/jcasc:ro
+      - ${JCASC_DIR}:/jcasc:ro
     environment:
       - CASC_JENKINS_CONFIG=/jcasc/
       - SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}
