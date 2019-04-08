@@ -3,3 +3,4 @@
 
 # instantiated config
 env.local
+buildout/

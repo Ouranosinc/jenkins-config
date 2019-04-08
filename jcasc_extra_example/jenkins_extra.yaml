@@ -1,0 +1,30 @@
+jenkins:
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: true
+  securityRealm:
+    local:
+      allowsSignup: true
+      enableCaptcha: false
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - usernamePassword:
+          description: "ESGF authentication username password"
+          id: "esgf_auth"
+          password: ${ESGF_AUTH_PASSWORD}
+          scope: GLOBAL
+          username: ${ESGF_AUTH_USERNAME}
+      - string:
+          description: "ESGF authentication token"
+          id: "esgf_auth_token"
+          scope: GLOBAL
+          secret: ${ESGF_AUTH_TOKEN}
+unclassified:
+  location:
+    adminAddress: "Jenkins <noreply@ouranos.ca>"  # from field for mail from Jenkins
+  extendedEmailPublisher:
+    allowUnregisteredEnabled: true
+
+# vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2
