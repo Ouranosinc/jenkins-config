@@ -33,19 +33,21 @@ then
   exit 1
 fi
 
-# create CASC_JENKINS_CONFIG
-CASC_JENKINS_CONFIG=buildout/jcasc_config
-rm -vrf $CASC_JENKINS_CONFIG
-mkdir -p $CASC_JENKINS_CONFIG
-cp -v $JCASC_DIR/*.yaml $CASC_JENKINS_CONFIG/
-for adir in $JCASC_EXTRA_DIRS; do
-  # latest dir has highest precedence
-  if [ -d "$adir" ]; then
-    cp -v $adir/*.yaml $CASC_JENKINS_CONFIG/
-  else
-    echo "${YELLOW}Warn${NORMAL}: JCASC extra dir '$adir' do not exist."
-  fi
-done
+if [[ $1 == "up" || $1 == "restart" ]]; then
+  # create CASC_JENKINS_CONFIG
+  CASC_JENKINS_CONFIG=buildout/jcasc_config
+  rm -vrf $CASC_JENKINS_CONFIG
+  mkdir -p $CASC_JENKINS_CONFIG
+  cp -v $JCASC_DIR/*.yaml $CASC_JENKINS_CONFIG/
+  for adir in $JCASC_EXTRA_DIRS; do
+    # latest dir has highest precedence
+    if [ -d "$adir" ]; then
+      cp -v $adir/*.yaml $CASC_JENKINS_CONFIG/
+    else
+      echo "${YELLOW}Warn${NORMAL}: JCASC extra dir '$adir' do not exist."
+    fi
+  done
+fi
 
 # we apply all the templates
 #find . -name '*.template' -print0 |
