@@ -5,7 +5,7 @@ RED=$(tput setaf 1)
 NORMAL=$(tput sgr0)
 
 # list of all variables to be substituted in templates
-VARS='$JENKINS_MASTER_PORT $SSH_PRIVATE_KEY $JENKINS_ADMIN_PASSWD $JENKINS_HTTP_PROTO $JENKINS_HOSTNAME $JENKINS_SLAVE_SSH_PUBKEY $JENKINS_NUM_EXECUTORS_LOCAL'
+VARS='$JENKINS_MASTER_PORT $SSH_PRIVATE_KEY $JENKINS_ADMIN_PASSWD $JENKINS_HTTP_PROTO $JENKINS_HOSTNAME $JENKINS_SLAVE_SSH_PUBKEY $JENKINS_NUM_EXECUTORS_LOCAL $JCASC_DIR'
 
 export DOCKER_GROUP_ON_HOST="`getent group |grep docker: | awk -F: '{print $3}'`"
 
@@ -31,6 +31,22 @@ if [[ ! -f docker-compose.yml ]]
 then
   echo "Error, this script must be ran from the folder containing the docker-compose.yml file"
   exit 1
+fi
+
+if [[ $1 == "up" || $1 == "restart" ]]; then
+  # create CASC_JENKINS_CONFIG
+  CASC_JENKINS_CONFIG=buildout/jcasc_config
+  rm -vrf $CASC_JENKINS_CONFIG
+  mkdir -p $CASC_JENKINS_CONFIG
+  cp -v $JCASC_DIR/*.yaml $CASC_JENKINS_CONFIG/
+  for adir in $JCASC_EXTRA_DIRS; do
+    # latest dir has highest precedence
+    if [ -d "$adir" ]; then
+      cp -v $adir/*.yaml $CASC_JENKINS_CONFIG/
+    else
+      echo "${YELLOW}Warn${NORMAL}: JCASC extra dir '$adir' do not exist."
+    fi
+  done
 fi
 
 # we apply all the templates

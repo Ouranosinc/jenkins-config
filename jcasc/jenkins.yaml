@@ -6,9 +6,6 @@ jenkins:
   agentProtocols:
   - "JNLP4-connect"
   - "Ping"
-  authorizationStrategy:
-    loggedInUsersCanDoAnything:
-      allowAnonymousRead: true
   crumbIssuer:
     standard:
       excludeClientIPFromCrumb: false
@@ -40,8 +37,6 @@ jenkins:
   scmCheckoutRetryCount: 0
   securityRealm:
     local:
-      allowsSignup: true
-      enableCaptcha: false
       users:
       - id: "admin"
         password: ${ADMIN_PASSWD}  # Env var
@@ -61,26 +56,12 @@ credentials:
               privateKey: ${SSH_PRIVATE_KEY}  # Load from Environment Variable
           scope: SYSTEM
           username: "jenkins"
-      - usernamePassword:
-          description: "ESGF authentication username password"
-          id: "esgf_auth"
-          password: ${ESGF_AUTH_PASSWORD}
-          scope: GLOBAL
-          username: ${ESGF_AUTH_USERNAME}
-      - string:
-          description: "ESGF authentication token"
-          id: "esgf_auth_token"
-          scope: GLOBAL
-          secret: ${ESGF_AUTH_TOKEN}
 security:
   remotingCLI:
     enabled: false
 unclassified:
   location:
-    adminAddress: "Jenkins <noreply@ouranos.ca>"  # from field for mail from Jenkins
     url: "${HTTP_PROTO}://${HOSTNAME}:${HOSTPORT}/"  # Env var
-  extendedEmailPublisher:
-    allowUnregisteredEnabled: true
 tool:
   git:
     installations:
