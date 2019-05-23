@@ -13242,7 +13242,18 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Jenkins-without-Configuration-as-Code-plugin">Jenkins without Configuration as Code plugin<a class="anchor-link" href="#Jenkins-without-Configuration-as-Code-plugin">&#182;</a></h1><p><img src="jenkins-manual.gif" alt="Jenkins without Configuration as Code plugin animated gif"></p>
+<h1 id="Jenkins-Configuration-as-Code">Jenkins Configuration as Code<a class="anchor-link" href="#Jenkins-Configuration-as-Code">&#182;</a></h1><p>We will look at how Jenkins is deployed at Ouranos.</p>
+<p>Ouranos is using Jenkins to run automated nightly integration tests on our PAVICS project.  The tests are actually regular Jupyter notebooks so we achieve two goals at once: tutorials notebooks and integration tests.</p>
+<p>By Long Vu, software developer at Ouranos.</p>
+<p>Presentation at the Canadian Research Software Conference, May 28, 2019.</p>
+
+</div>
+</div>
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Jenkins-without-Configuration-as-Code-plugin">Jenkins without Configuration as Code plugin<a class="anchor-link" href="#Jenkins-without-Configuration-as-Code-plugin">&#182;</a></h1><p><img src="https://github.com/Ouranosinc/jenkins-config/raw/master/canarie-presentation/jenkins-manual.gif" alt="Jenkins without Configuration as Code plugin animated gif"></p>
 <ul>
 <li>No automated configuration sync between Production and Staging instances</li>
 <li>Very time consuming to manually reconfigure a fresh instance to replicate exactly the same configurations</li>
@@ -13255,7 +13266,7 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Jenkins-using-Configuration-as-Code-plugin">Jenkins using Configuration as Code plugin<a class="anchor-link" href="#Jenkins-using-Configuration-as-Code-plugin">&#182;</a></h1><p><img src="jenkins-with-jcasc.gif" alt="Jenkins using Configuration as Code plugin animated gif"></p>
+<h1 id="Jenkins-using-Configuration-as-Code-plugin">Jenkins using Configuration as Code plugin<a class="anchor-link" href="#Jenkins-using-Configuration-as-Code-plugin">&#182;</a></h1><p><img src="https://github.com/Ouranosinc/jenkins-config/raw/master/canarie-presentation/jenkins-with-jcasc.gif" alt="Jenkins using Configuration as Code plugin animated gif"></p>
 <ul>
 <li>Fixes all the previous problems</li>
 <li>Fits the DevOPS way of "Infrastructure as Code"</li>
@@ -13284,6 +13295,7 @@ require(
 
         // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
         Reveal.initialize({
+slideNumber: "c/t",
             controls: true,
             progress: true,
             history: true,
