@@ -3,6 +3,10 @@ Jenkins deployment configurations.
 
 ## Usage
 
+Ensure you have [docker](https://www.docker.com/) and
+[docker-compose](https://docs.docker.com/compose/) installed on your Linux
+host.
+
 One time setup
 ```
 ssh-keygen -t rsa -f ../my-cert/id_rsa_jenkins
@@ -28,6 +32,13 @@ Upgrade instructions
 git pull
 ./jenkins-compose.sh up -d
 ```
+
+See
+[canarie-presentation/presentation.slides.html](canarie-presentation/presentation.slides.html)
+for a demo run of this repo.  Github do not play the presentation, you'll have
+to download it and open it locally with your internet browser (tested with
+Firefox and Chromium/Chrome only).
+
 
 ## Data Persistance
 
