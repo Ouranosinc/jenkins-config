@@ -1,0 +1,14 @@
+version: '2'
+services:
+  master:
+    environment:
+      # https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy
+      # Forcing an uncached reload ("Shift-F5" or equivalent) of the affected
+      # web page may be necessary after changing the system property for the
+      # behavior to change.
+      # CAUTION: Disabling the Content Security Policy header is **potentially
+      # very unsafe** and should only be used after reviewing the overall
+      # security setup.
+      - JAVA_OPTS= -Dhudson.model.DirectoryBrowserSupport.CSP=
+
+# vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2

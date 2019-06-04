@@ -3,4 +3,5 @@
 
 # instantiated config
 env.local
+docker-compose.override.yml
 buildout/
