@@ -6,7 +6,9 @@ jenkins:
     standard:
       excludeClientIPFromCrumb: false
   disableRememberMe: false
+  markupFormatter: "plainText"
   mode: NORMAL
+  myViewsTabBar: "standard"
   nodes:
   - permanent:
       labelString: "linux docker"
@@ -29,7 +31,10 @@ jenkins:
   primaryView:
     all:
       name: "all"
+  projectNamingStrategy: "standard"
   quietPeriod: 5
+  remotingSecurity:
+    enabled: true
   scmCheckoutRetryCount: 0
   securityRealm:
     local:
@@ -44,6 +49,18 @@ jenkins:
   views:
   - all:
       name: "all"
+  viewsTabBar: "standard"
+security:
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+  downloadSettings:
+    useBrowser: false
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: true
+  sSHD:
+    port: -1
 credentials:
   system:
     domainCredentials:
