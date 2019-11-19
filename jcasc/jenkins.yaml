@@ -1,7 +1,3 @@
-plugins:
-  sites:
-  - id: "default"
-    url: "https://updates.jenkins.io/update-center.json"
 jenkins:
   agentProtocols:
   - "JNLP4-connect"
@@ -41,6 +37,10 @@ jenkins:
       - id: "admin"
         password: ${ADMIN_PASSWD}  # Env var
   slaveAgentPort: 50000
+  updateCenter:
+    sites:
+    - id: "default"
+      url: "https://updates.jenkins.io/update-center.json"
   views:
   - all:
       name: "all"
