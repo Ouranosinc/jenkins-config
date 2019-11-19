@@ -56,9 +56,6 @@ credentials:
               privateKey: ${SSH_PRIVATE_KEY}  # Load from Environment Variable
           scope: SYSTEM
           username: "jenkins"
-security:
-  remotingCLI:
-    enabled: false
 unclassified:
   location:
     url: "${HTTP_PROTO}://${HOSTNAME}:${HOSTPORT}/"  # Env var
