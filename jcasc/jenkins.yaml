@@ -1,3 +1,15 @@
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - basicSSHUserPrivateKey:
+          description: "private id_rsa_jenkins to connect to worker"
+          id: "id_rsa_jenkins"
+          privateKeySource:
+            directEntry:
+              privateKey: ${SSH_PRIVATE_KEY}  # Load from Environment Variable
+          scope: SYSTEM
+          username: "jenkins"
 jenkins:
   agentProtocols:
   - "JNLP4-connect"
@@ -13,7 +25,7 @@ jenkins:
   - permanent:
       labelString: "linux docker"
       launcher:
-        sSHLauncher:
+        ssh:
           credentialsId: "id_rsa_jenkins"
           host: "slave"
           launchTimeoutSeconds: 210
@@ -61,18 +73,6 @@ security:
     useScriptSecurity: true
   sSHD:
     port: -1
-credentials:
-  system:
-    domainCredentials:
-    - credentials:
-      - basicSSHUserPrivateKey:
-          description: "private id_rsa_jenkins to connect to worker"
-          id: "id_rsa_jenkins"
-          privateKeySource:
-            directEntry:
-              privateKey: ${SSH_PRIVATE_KEY}  # Load from Environment Variable
-          scope: SYSTEM
-          username: "jenkins"
 unclassified:
   location:
     url: "${HTTP_PROTO}://${HOSTNAME}:${HOSTPORT}/"  # Env var
