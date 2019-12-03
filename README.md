@@ -30,6 +30,8 @@ Upgrade instructions
 ```
 ./jenkins-compose.sh down -v  # only delete anonymous data volume
 git pull
+# update env.local with new variables from env.local.example if needed
+scripts/backup-jenkins-master.sh  # backup to /tmp
 ./jenkins-compose.sh up -d
 ```
 
