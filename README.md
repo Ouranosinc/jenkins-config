@@ -27,10 +27,14 @@ those variables are from your customized `env.local` file.
 docker-compose use-cases and command-line options are supported.
 
 Upgrade instructions
-```
+```shell
 ./jenkins-compose.sh down -v  # only delete anonymous data volume
 git pull
+# update env.local with new variables from env.local.example if needed
+scripts/backup-jenkins-master.sh  # backup to /tmp
 ./jenkins-compose.sh up -d
+# multibranch pipeline jobs might need a manual "Scan Multibranch Pipeline Now"
+# to keep Stage View intact
 ```
 
 See

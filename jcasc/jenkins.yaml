@@ -1,7 +1,15 @@
-plugins:
-  sites:
-  - id: "default"
-    url: "https://updates.jenkins.io/update-center.json"
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - basicSSHUserPrivateKey:
+          description: "private id_rsa_jenkins to connect to worker"
+          id: "id_rsa_jenkins"
+          privateKeySource:
+            directEntry:
+              privateKey: ${SSH_PRIVATE_KEY}  # Load from Environment Variable
+          scope: SYSTEM
+          username: "jenkins"
 jenkins:
   agentProtocols:
   - "JNLP4-connect"
@@ -10,12 +18,14 @@ jenkins:
     standard:
       excludeClientIPFromCrumb: false
   disableRememberMe: false
+  markupFormatter: "plainText"
   mode: NORMAL
+  myViewsTabBar: "standard"
   nodes:
   - permanent:
       labelString: "linux docker"
       launcher:
-        sSHLauncher:
+        ssh:
           credentialsId: "id_rsa_jenkins"
           host: "slave"
           launchTimeoutSeconds: 210
@@ -33,7 +43,10 @@ jenkins:
   primaryView:
     all:
       name: "all"
+  projectNamingStrategy: "standard"
   quietPeriod: 5
+  remotingSecurity:
+    enabled: true
   scmCheckoutRetryCount: 0
   securityRealm:
     local:
@@ -41,24 +54,25 @@ jenkins:
       - id: "admin"
         password: ${ADMIN_PASSWD}  # Env var
   slaveAgentPort: 50000
+  updateCenter:
+    sites:
+    - id: "default"
+      url: "https://updates.jenkins.io/update-center.json"
   views:
   - all:
       name: "all"
-credentials:
-  system:
-    domainCredentials:
-    - credentials:
-      - basicSSHUserPrivateKey:
-          description: "private id_rsa_jenkins to connect to worker"
-          id: "id_rsa_jenkins"
-          privateKeySource:
-            directEntry:
-              privateKey: ${SSH_PRIVATE_KEY}  # Load from Environment Variable
-          scope: SYSTEM
-          username: "jenkins"
+  viewsTabBar: "standard"
 security:
-  remotingCLI:
-    enabled: false
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+  downloadSettings:
+    useBrowser: false
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: true
+  sSHD:
+    port: -1
 unclassified:
   location:
     url: "${HTTP_PROTO}://${HOSTNAME}:${HOSTPORT}/"  # Env var
