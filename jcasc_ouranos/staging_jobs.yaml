@@ -1,0 +1,31 @@
+jobs:
+  - script: >
+      folder('ouranos-staging')
+  - script: >
+      pipelineJob('ouranos-staging/medus.ouranos.ca') {
+        description('Run nightlies on staging server medus.ouranos.ca.')
+        definition {
+          cpsScm {
+            scriptPath 'Jenkinsfile'
+            scm {
+              git {
+                remote {
+                  url('https://github.com/Ouranosinc/PAVICS-e2e-workflow-tests.git')
+                }
+                branch('master')
+                extensions {
+                  cleanAfterCheckout()
+                }
+              }
+            }
+            lightweight true
+          }
+        }
+
+        environmentVariables {
+          env('DEFAULT_PAVICS_HOST', 'medus.ouranos.ca')
+        }
+      }
+
+
+# vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2
