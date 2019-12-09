@@ -49,6 +49,14 @@ if [[ $1 == "up" || $1 == "restart" ]]; then
   done
 fi
 
+if [ -z "$JENKINS_IS_PROD" ]; then
+  export JENKINS_IS_PROD="false"
+fi
+
+if [ -z "$JENKINS_ENABLE_SCHEDULED_TRIGGER" ]; then
+  export JENKINS_ENABLE_SCHEDULED_TRIGGER="false"
+fi
+
 # we apply all the templates
 #find . -name '*.template' -print0 |
 #  while IFS= read -r -d $'\0' FILE
