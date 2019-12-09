@@ -24,6 +24,15 @@ jobs:
 
         environmentVariables {
           env('DEFAULT_PAVICS_HOST', 'medus.ouranos.ca')
+
+          // Needed for first build, else will use default that is not this default.
+          env('PAVICS_HOST', 'medus.ouranos.ca')
+        }
+
+        triggers {
+          // Same cron as in Jenkinsfile but need to "seed" it here for first build to run.
+          // Settings in Jenkinsfiles will only apply after first build.
+          cron('@midnight')
         }
       }
 
