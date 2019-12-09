@@ -25,8 +25,11 @@ jobs:
         environmentVariables {
           env('DEFAULT_PAVICS_HOST', 'medus.ouranos.ca')
 
-          // Needed for first build, else will use default that is not this default.
+          // Override PAVICS_HOST build parameter.
           env('PAVICS_HOST', 'medus.ouranos.ca')
+
+          // Needed because PAVICS_HOST is a build parameter.
+          overrideBuildParameters()
         }
 
         triggers {
