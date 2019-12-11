@@ -49,6 +49,18 @@ if [[ $1 == "up" || $1 == "restart" ]]; then
   done
 fi
 
+if [ -z "$JENKINS_IS_PROD" ]; then
+  export JENKINS_IS_PROD="false"
+fi
+
+if [ -z "$JENKINS_ENABLE_SCHEDULED_TRIGGER" ]; then
+  export JENKINS_ENABLE_SCHEDULED_TRIGGER="false"
+fi
+
+if [ -z "$JENKINS_DEFAULT_PAVICS_HOST" ]; then
+  export JENKINS_DEFAULT_PAVICS_HOST="pavics.ouranos.ca"
+fi
+
 # we apply all the templates
 #find . -name '*.template' -print0 |
 #  while IFS= read -r -d $'\0' FILE

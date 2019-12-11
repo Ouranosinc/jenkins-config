@@ -1,7 +1,7 @@
 version: '2'
 services:
   master:
-    image: pavics/jenkins-master:2.190.3.191129
+    image: pavics/jenkins-master:2.190.3.191209
     hostname: jenkins_master
     ports:
       - "${JENKINS_MASTER_PORT}:8080"
@@ -19,6 +19,9 @@ services:
       - ESGF_AUTH_USERNAME=$JENKINS_ESGF_AUTH_USERNAME
       - ESGF_AUTH_PASSWORD=$JENKINS_ESGF_AUTH_PASSWORD
       - ESGF_AUTH_TOKEN=$JENKINS_ESGF_AUTH_TOKEN
+      - IS_PROD=$JENKINS_IS_PROD
+      - ENABLE_SCHEDULED_TRIGGER=$JENKINS_ENABLE_SCHEDULED_TRIGGER
+      - DEFAULT_PAVICS_HOST=$JENKINS_DEFAULT_PAVICS_HOST
     links:
       - slave
     restart: always

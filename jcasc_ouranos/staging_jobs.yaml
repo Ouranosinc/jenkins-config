@@ -1,0 +1,58 @@
+jobs:
+  - script: >
+      folder('ouranos-staging')
+  - script: >
+      pipelineJob('ouranos-staging/medus.ouranos.ca') {
+        //
+        // Copy/paste this block for more than 1 staging/dev servers.
+        // This block is for medus.ouranos.ca.  Do a find/replace for other servers.
+        //
+        description('Run nightlies on staging server medus.ouranos.ca.')
+        definition {
+          cpsScm {
+            scriptPath 'Jenkinsfile'
+            scm {
+              git {
+                remote {
+                  url('https://github.com/Ouranosinc/PAVICS-e2e-workflow-tests.git')
+                }
+                branch('master')
+                extensions {
+                  cleanAfterCheckout()
+                }
+              }
+            }
+            lightweight true
+          }
+        }
+
+        environmentVariables {
+          // This section requires the envinject plugin.
+          // It is known that envinject do not work properly with pipeline.
+          // "These EnvVars are being injected to the script environment and
+          // will be inaccessible via the "env" Pipeline global variable"
+
+          env('DEFAULT_PAVICS_HOST', 'medus.ouranos.ca')
+
+          // Override PAVICS_HOST build parameter.
+          env('PAVICS_HOST', 'medus.ouranos.ca')
+
+          // Needed because PAVICS_HOST is a build parameter.
+          overrideBuildParameters()
+
+          // Needed because setting DEFAULT_PAVICS_HOST and PAVICS_HOST do not
+          // work due to known incompatibility between envinject and pipeline.
+          // This one works because it's not a build parameter while the other
+          // 2 are related to build parameters.
+          env('FORCE_PAVICS_HOST', 'medus.ouranos.ca')
+        }
+
+        triggers {
+          // Same cron as in Jenkinsfile but need to "seed" it here for first build to run.
+          // Settings in Jenkinsfiles will only apply after first build.
+          cron('@midnight')
+        }
+      }
+
+
+# vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2
