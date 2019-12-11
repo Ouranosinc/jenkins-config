@@ -3,6 +3,10 @@ jobs:
       folder('ouranos-staging')
   - script: >
       pipelineJob('ouranos-staging/medus.ouranos.ca') {
+        //
+        // Copy/paste this block for more than 1 staging/dev servers.
+        // This block is for medus.ouranos.ca.  Do a find/replace for other servers.
+        //
         description('Run nightlies on staging server medus.ouranos.ca.')
         definition {
           cpsScm {
