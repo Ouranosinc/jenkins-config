@@ -3,11 +3,6 @@ jobs:
       folder('ouranos-staging')
   - script: >
       pipelineJob('ouranos-staging/medus.ouranos.ca') {
-      //
-      // This job DO NOT WORK as intended due to envinject incompatibility with pipeline.
-      // It still hit pavics.ouranos.ca by default (should have been medus.ouranos.ca).
-      // Keep here until a work-around is found or the incompatibility is fixed.
-      //
         description('Run nightlies on staging server medus.ouranos.ca.')
         definition {
           cpsScm {
@@ -40,6 +35,12 @@ jobs:
 
           // Needed because PAVICS_HOST is a build parameter.
           overrideBuildParameters()
+
+          // Needed because setting DEFAULT_PAVICS_HOST and PAVICS_HOST do not
+          // work due to known incompatibility between envinject and pipeline.
+          // This one works because it's not a build parameter while the other
+          // 2 are related to build parameters.
+          env('FORCE_PAVICS_HOST', 'medus.ouranos.ca')
         }
 
         triggers {
