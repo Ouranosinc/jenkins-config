@@ -1,0 +1,32 @@
+#!/bin/sh -x
+
+# From https://raw.githubusercontent.com/Ouranosinc/jenkins-ssh-slave/3d40413616c05fc98f92269d22636dd085c83d03/entrypoint_slave
+#
+# To override the entrypoint in the existing slave.
+#
+# New build of the slave will already have this new entrypoint but unable to
+# use new build for the slave with new master.  New master unable to connect to
+# new slave over ssh.
+#
+# This is just a work-around until we can get the new slave working with the
+# new master.
+
+if [ -n "$DOCKER_GROUP_ON_HOST" ]; then
+
+    # create a new group with the same id as the docker group on the original
+    # host
+    addgroup --gid $DOCKER_GROUP_ON_HOST docker_from_host
+
+    # in the case when the docker group gid is the same on the host and in the
+    # container, the previous command will fail, because the group already exists.
+    # so we get the docker group name from the gid instead.
+    docker_group_name=$(cat /etc/group | grep :$DOCKER_GROUP_ON_HOST: | cut -d ':' -f1)
+
+    # add user jenkins, that will run the slave, to that new group so user
+    # jenkins can launch docker containers using the docker daemon on the
+    # original host
+    usermod -G "$docker_group_name" -a jenkins
+fi
+
+# finally call the same entrypoint as the original base image
+/usr/local/bin/setup-sshd "$@"

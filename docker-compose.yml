@@ -31,6 +31,7 @@ services:
     hostname: jenkins_slave
     volumes:
       - slave_home:/home/jenkins
+      - ./jenkins-slave/entrypoint_slave:/entrypoint:ro
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - JENKINS_SLAVE_SSH_PUBKEY=$JENKINS_SLAVE_SSH_PUBKEY
