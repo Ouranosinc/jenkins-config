@@ -1,7 +1,7 @@
 version: '2'
 services:
   master:
-    image: pavics/jenkins-master:2.190.3.191209
+    image: pavics/jenkins-master:2.249.1.201005
     hostname: jenkins_master
     ports:
       - "${JENKINS_MASTER_PORT}:8080"
