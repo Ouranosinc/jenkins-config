@@ -1,5 +1,16 @@
 # jenkins-config
-Jenkins deployment configurations.
+Jenkins deployment configuration, fully pre-configured and ready-to-go.
+
+Pre-configured for https://github.com/Ouranosinc/PAVICS-e2e-workflow-tests, see
+[`jobs.yaml`](jcasc/jobs.yaml).
+
+Still generic enough that any additional jobs/configurations can be added, see
+`JCASC_DIR` and `JCASC_EXTRA_DIRS` in [`env.local.example`](env.local.example).
+
+Note the `PAVICS-e2e-workflow-tests` job above brings its own Docker runtime
+environment so this Jenkins config do not have to change for any new jobs
+added.
+
 
 ## Usage
 
