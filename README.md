@@ -1,7 +1,10 @@
 # jenkins-config
 Jenkins deployment configuration, fully pre-configured and ready-to-go.
 
-Pre-configured for https://github.com/Ouranosinc/PAVICS-e2e-workflow-tests, see
+Pre-configured for test suite
+https://github.com/Ouranosinc/PAVICS-e2e-workflow-tests to test against
+PAVICS deployment
+https://github.com/bird-house/birdhouse-deploy/tree/master/birdhouse, see
 [`jobs.yaml`](jcasc/jobs.yaml).
 
 Still generic enough that any additional jobs/configurations can be added, see
