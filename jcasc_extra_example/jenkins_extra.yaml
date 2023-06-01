@@ -21,6 +21,16 @@ credentials:
           id: "esgf_auth_token"
           scope: GLOBAL
           secret: ${ESGF_AUTH_TOKEN}
+      - string:
+          description: "HydroShare client id"
+          id: "hydroshare_auth_client_id"
+          scope: GLOBAL
+          secret: ${HYDROSHARE_AUTH_CLIENT_ID}
+      - string:
+          description: "HydroShare authentication token"
+          id: "hydroshare_auth_token"
+          scope: GLOBAL
+          secret: ${HYDROSHARE_AUTH_TOKEN}
 unclassified:
   location:
     adminAddress: "Jenkins <noreply@ouranos.ca>"  # from field for mail from Jenkins
