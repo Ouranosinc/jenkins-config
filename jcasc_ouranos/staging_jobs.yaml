@@ -50,7 +50,7 @@ jobs:
         triggers {
           // Same cron as in Jenkinsfile but need to "seed" it here for first build to run.
           // Settings in Jenkinsfiles will only apply after first build.
-          cron('@midnight')
+          //cron('@midnight')
         }
       }
 
