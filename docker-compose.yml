@@ -25,6 +25,10 @@ services:
       - ENABLE_SCHEDULED_TRIGGER=$JENKINS_ENABLE_SCHEDULED_TRIGGER
       - DEFAULT_PAVICS_HOST=$JENKINS_DEFAULT_PAVICS_HOST
       - SMTP_HOST=$JENKINS_SMTP_HOST
+      # For error "process apparently never started in
+      # /home/jenkins/agent/workspace/_workflow-tests_new-docker-build@tmp/durable-12eaff4f"
+      # on RockyLinux9 (RL8 was fine)
+      - JAVA_OPTS= -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS=true
     links:
       - slave
     restart: always
@@ -39,6 +43,10 @@ services:
     environment:
       - JENKINS_SLAVE_SSH_PUBKEY=$JENKINS_SLAVE_SSH_PUBKEY
       - DOCKER_GROUP_ON_HOST=$DOCKER_GROUP_ON_HOST
+      # For error "process apparently never started in
+      # /home/jenkins/agent/workspace/_workflow-tests_new-docker-build@tmp/durable-12eaff4f"
+      # on RockyLinux9 (RL8 was fine)
+      - JAVA_OPTS= -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS=true
     restart: always
 
 volumes:
