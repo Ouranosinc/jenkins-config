@@ -1,4 +1,5 @@
-Copy to `/etc/docker/daemon.json`.
+Need to start `dockerd` with `--default-ulimit nofile=65536:524288
+--default-cgroupns-mode host`.
 
 Need to set `default-ulimit` because the default changed with RL9 and
 the default value is too low.
