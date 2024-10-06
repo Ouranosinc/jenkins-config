@@ -1,6 +1,6 @@
 Copy to `/etc/docker/daemon.json`.
 
-Need to set `default-ulimit nofile` because the default changed with RL9 and
+Need to set `default-ulimit` because the default changed with RL9 and
 the default value is too low.
 
 ```
