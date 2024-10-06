@@ -1,0 +1,4 @@
+{
+  "default-ulimit nofile": "65536:524288",
+  "default-cgroupns-mode": "host"
+}
