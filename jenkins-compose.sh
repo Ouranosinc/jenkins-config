@@ -69,6 +69,7 @@ fi
 #    cat $FILE | envsubst "$VARS" > $DEST
 #  done
 
+set -x  # Log command
 # create volume outside of docker-compose.yml to prevent
 # `docker-compose down -v` to delete the volume.
 # if volume already exist, this call will do nothing
@@ -77,8 +78,9 @@ if [[ $1 == "up" ]]; then
   docker volume create jenkins_slave_home_$JENKINS_MASTER_PORT
 fi
 
-docker-compose "$@"
+${JENKINS_COMPOSE_BIN:=docker compose} "$@"
 ERR=$?
+set +x
 
 # execute post-compose function if exists and no error occurred
 type post-compose 2>&1 | grep 'post-compose is a function' > /dev/null
