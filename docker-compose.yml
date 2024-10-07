@@ -1,4 +1,10 @@
-version: '2'
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "50m"
+    max-file: "10"
+
+
 services:
   master:
     image: pavics/jenkins-master:2.190.3.191209
@@ -32,6 +38,8 @@ services:
     links:
       - slave
     restart: always
+    logging:
+      <<: *default-logging
 
   slave:
     image: pavics/jenkins-ssh-slave:190226
@@ -48,6 +56,9 @@ services:
       # on RockyLinux9 (RL8 was fine)
       - JAVA_OPTS= -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS=true
     restart: always
+    logging:
+      <<: *default-logging
+
 
 volumes:
   master_home:
