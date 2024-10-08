@@ -1,4 +1,16 @@
-version: '2'
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "50m"
+    max-file: "10"
+
+x-common-env: &common-env
+  # For error "process apparently never started in
+  # /home/jenkins/agent/workspace/_workflow-tests_new-docker-build@tmp/durable-12eaff4f"
+  # on RockyLinux9 (RL8 was fine)
+  JAVA_OPTS: -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS=true
+
+
 services:
   master:
     image: pavics/jenkins-master:2.190.3.191209
@@ -9,25 +21,28 @@ services:
       - master_home:/var/jenkins_home
       - ./buildout/jcasc_config:/jcasc:ro
     environment:
-      - CASC_JENKINS_CONFIG=/jcasc/
-      - SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}
-      - ADMIN_PASSWD=$JENKINS_ADMIN_PASSWD
-      - HTTP_PROTO=$JENKINS_HTTP_PROTO
-      - HOSTNAME=$JENKINS_HOSTNAME
-      - HOSTPORT=$JENKINS_MASTER_PORT
-      - NUM_EXECUTORS=$JENKINS_NUM_EXECUTORS_LOCAL
-      - ESGF_AUTH_USERNAME=$JENKINS_ESGF_AUTH_USERNAME
-      - ESGF_AUTH_PASSWORD=$JENKINS_ESGF_AUTH_PASSWORD
-      - ESGF_AUTH_TOKEN=$JENKINS_ESGF_AUTH_TOKEN
-      - HYDROSHARE_AUTH_CLIENT_ID=$JENKINS_HYDROSHARE_AUTH_CLIENT_ID
-      - HYDROSHARE_AUTH_TOKEN=$JENKINS_HYDROSHARE_AUTH_TOKEN
-      - IS_PROD=$JENKINS_IS_PROD
-      - ENABLE_SCHEDULED_TRIGGER=$JENKINS_ENABLE_SCHEDULED_TRIGGER
-      - DEFAULT_PAVICS_HOST=$JENKINS_DEFAULT_PAVICS_HOST
-      - SMTP_HOST=$JENKINS_SMTP_HOST
+      CASC_JENKINS_CONFIG: /jcasc/
+      SSH_PRIVATE_KEY: ${SSH_PRIVATE_KEY}
+      ADMIN_PASSWD: $JENKINS_ADMIN_PASSWD
+      HTTP_PROTO: $JENKINS_HTTP_PROTO
+      HOSTNAME: $JENKINS_HOSTNAME
+      HOSTPORT: $JENKINS_MASTER_PORT
+      NUM_EXECUTORS: $JENKINS_NUM_EXECUTORS_LOCAL
+      ESGF_AUTH_USERNAME: $JENKINS_ESGF_AUTH_USERNAME
+      ESGF_AUTH_PASSWORD: $JENKINS_ESGF_AUTH_PASSWORD
+      ESGF_AUTH_TOKEN: $JENKINS_ESGF_AUTH_TOKEN
+      HYDROSHARE_AUTH_CLIENT_ID: $JENKINS_HYDROSHARE_AUTH_CLIENT_ID
+      HYDROSHARE_AUTH_TOKEN: $JENKINS_HYDROSHARE_AUTH_TOKEN
+      IS_PROD: $JENKINS_IS_PROD
+      ENABLE_SCHEDULED_TRIGGER: $JENKINS_ENABLE_SCHEDULED_TRIGGER
+      DEFAULT_PAVICS_HOST: $JENKINS_DEFAULT_PAVICS_HOST
+      SMTP_HOST: $JENKINS_SMTP_HOST
+      <<: *common-env
     links:
       - slave
     restart: always
+    logging:
+      <<: *default-logging
 
   slave:
     image: pavics/jenkins-ssh-slave:190226
@@ -37,16 +52,20 @@ services:
       - ./jenkins-slave/entrypoint_slave:/entrypoint:ro
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - JENKINS_SLAVE_SSH_PUBKEY=$JENKINS_SLAVE_SSH_PUBKEY
-      - DOCKER_GROUP_ON_HOST=$DOCKER_GROUP_ON_HOST
+      JENKINS_SLAVE_SSH_PUBKEY: $JENKINS_SLAVE_SSH_PUBKEY
+      DOCKER_GROUP_ON_HOST: $DOCKER_GROUP_ON_HOST
+      <<: *common-env
     restart: always
+    logging:
+      <<: *default-logging
+
 
 volumes:
   master_home:
-    external:
-      name: jenkins_master_home_$JENKINS_MASTER_PORT
+    external: true
+    name: jenkins_master_home_$JENKINS_MASTER_PORT
   slave_home:
-    external:
-      name: jenkins_slave_home_$JENKINS_MASTER_PORT
+    external: true
+    name: jenkins_slave_home_$JENKINS_MASTER_PORT
 
 # vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2
