@@ -1,6 +1,7 @@
 jobs:
   - script: >
       folder('ouranos-staging')
+
   - script: >
       pipelineJob('ouranos-staging/medus.ouranos.ca') {
         //
@@ -45,6 +46,43 @@ jobs:
           // This one works because it's not a build parameter while the other
           // 2 are related to build parameters.
           env('FORCE_PAVICS_HOST', 'medus.ouranos.ca')
+        }
+
+        triggers {
+          // Same cron as in Jenkinsfile but need to "seed" it here for first build to run.
+          // Settings in Jenkinsfiles will only apply after first build.
+          //cron('@midnight')
+        }
+      }
+
+  - script: >
+      pipelineJob('ouranos-staging/test-rook') {
+        description('Test roocs/rook repo. ')
+        definition {
+          cpsScm {
+            scriptPath 'Jenkinsfile'
+            scm {
+              git {
+                remote {
+                  url('https://github.com/Ouranosinc/PAVICS-e2e-workflow-tests.git')
+                }
+                branch('master')
+                extensions {
+                  cleanAfterCheckout()
+                }
+              }
+            }
+            lightweight true
+          }
+        }
+
+        environmentVariables {
+          // This section requires the envinject plugin.
+          // It is known that envinject do not work properly with pipeline.
+          // "These EnvVars are being injected to the script environment and
+          // will be inaccessible via the "env" Pipeline global variable"
+
+          env('DEFAULT_CONFIG_PARAMETERS_SCRIPT_URL', 'https://raw.githubusercontent.com/Ouranosinc/PAVICS-e2e-workflow-tests/refs/heads/master/test-override/jenkins-params-external-repos.include.sh')
         }
 
         triggers {
