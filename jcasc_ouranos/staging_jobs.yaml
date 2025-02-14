@@ -82,7 +82,7 @@ jobs:
           // "These EnvVars are being injected to the script environment and
           // will be inaccessible via the "env" Pipeline global variable"
 
-          env('DEFAULT_2_CONFIG_PARAMETERS_SCRIPT_URL', 'https://raw.githubusercontent.com/Ouranosinc/PAVICS-e2e-workflow-tests/refs/heads/master/test-override/jenkins-params-external-repos.include.sh')
+          env('DEFAULT_2_CONFIG_PARAMETERS_SCRIPT_URL', 'https://raw.githubusercontent.com/Ouranosinc/PAVICS-e2e-workflow-tests/refs/heads/add-default-config-to-disable-some-notebooks/test-override/jenkins-params-external-repos.include.sh')
         }
 
         triggers {
