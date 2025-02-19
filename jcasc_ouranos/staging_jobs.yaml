@@ -84,7 +84,7 @@ jobs:
 
           // Can not use DEFAULT_CONFIG_PARAMETERS_SCRIPT_URL because it seems
           // we can not override global env var.
-          env('DEFAULT_2_CONFIG_PARAMETERS_SCRIPT_URL', 'https://raw.githubusercontent.com/Ouranosinc/PAVICS-e2e-workflow-tests/refs/heads/master/test-override/jenkins-params-external-repos.include.sh')
+          env('CI_OVERRIDE_CONFIG_PARAMETERS_SCRIPT_URL', 'https://raw.githubusercontent.com/Ouranosinc/PAVICS-e2e-workflow-tests/refs/heads/master/test-override/jenkins-params-external-repos.include.sh')
         }
 
         triggers {
