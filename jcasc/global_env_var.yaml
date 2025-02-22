@@ -8,6 +8,8 @@ jenkins:
         value: ${ENABLE_SCHEDULED_TRIGGER}  # Env var from env.local
       - key: DEFAULT_PAVICS_HOST
         value: ${DEFAULT_PAVICS_HOST}  # Env var from env.local
+      - key: DEFAULT_CONFIG_PARAMETERS_SCRIPT_URL
+        value: ${DEFAULT_CONFIG_PARAMETERS_SCRIPT_URL}  # Env var from env.local
 
 
 # vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2
