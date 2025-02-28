@@ -1,14 +1,10 @@
 jobs:
   - script: >
-      folder('ouranos-staging')
+      folder('external-repos')
 
   - script: >
-      pipelineJob('ouranos-staging/medus.ouranos.ca') {
-        //
-        // Copy/paste this block for more than 1 staging/dev servers.
-        // This block is for medus.ouranos.ca.  Do a find/replace for other servers.
-        //
-        description('Run nightlies on staging server medus.ouranos.ca.')
+      pipelineJob('external-repos/roocs-rook') {
+        description('Test roocs/rook repo. ')
         definition {
           cpsScm {
             scriptPath 'Jenkinsfile'
@@ -33,19 +29,9 @@ jobs:
           // "These EnvVars are being injected to the script environment and
           // will be inaccessible via the "env" Pipeline global variable"
 
-          env('DEFAULT_PAVICS_HOST', 'medus.ouranos.ca')
-
-          // Override PAVICS_HOST build parameter.
-          env('PAVICS_HOST', 'medus.ouranos.ca')
-
-          // Needed because PAVICS_HOST is a build parameter.
-          overrideBuildParameters()
-
-          // Needed because setting DEFAULT_PAVICS_HOST and PAVICS_HOST do not
-          // work due to known incompatibility between envinject and pipeline.
-          // This one works because it's not a build parameter while the other
-          // 2 are related to build parameters.
-          env('FORCE_PAVICS_HOST', 'medus.ouranos.ca')
+          // Can not use DEFAULT_CONFIG_PARAMETERS_SCRIPT_URL because it seems
+          // we can not override global env var.
+          env('CI_OVERRIDE_CONFIG_PARAMETERS_SCRIPT_URL', 'https://raw.githubusercontent.com/Ouranosinc/PAVICS-e2e-workflow-tests/refs/heads/master/test-override/jenkins-params-external-repos.include.sh')
         }
 
         triggers {
