@@ -15,7 +15,9 @@ jobs:
         }
         triggers {
           // trigger scan multibranch pipeline every day (60 mins * 24h = 1440 mins)
-          periodic(1440)
+          periodicFolderTrigger {
+            interval('1440')
+          }
         }
         factory {
           workflowBranchProjectFactory {

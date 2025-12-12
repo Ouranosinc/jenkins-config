@@ -112,6 +112,10 @@ fi
 #    cat $FILE | envsubst "$VARS" > $DEST
 #  done
 
+############################################################################
+# Execution
+############################################################################
+
 set -x  # Log command
 # create volume outside of docker-compose.yml to prevent
 # `docker-compose down -v` to delete the volume.

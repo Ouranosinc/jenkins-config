@@ -10,6 +10,10 @@ credentials:
               privateKey: ${SSH_PRIVATE_KEY}  # Load from Environment Variable
           scope: SYSTEM
           username: "jenkins"
+# avoid startup failure from 'jenkins.agentProtocols' if older version is used
+# https://www.jenkins.io/doc/upgrade-guide/2.492/
+configuration-as-code:
+  deprecated: warn
 jenkins:
   agentProtocols:
   - "JNLP4-connect"
