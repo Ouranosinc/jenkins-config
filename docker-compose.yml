@@ -13,7 +13,7 @@ x-common-env: &common-env
 
 services:
   master:
-    image: pavics/jenkins-master:2.190.3.191209
+    image: ${JENKINS_MASTER_IMAGE}
     hostname: jenkins_master
     ports:
       - "${JENKINS_MASTER_PORT}:8080"
@@ -23,21 +23,23 @@ services:
     environment:
       CASC_JENKINS_CONFIG: /jcasc/
       SSH_PRIVATE_KEY: ${SSH_PRIVATE_KEY}
-      ADMIN_PASSWD: $JENKINS_ADMIN_PASSWD
-      HTTP_PROTO: $JENKINS_HTTP_PROTO
-      HOSTNAME: $JENKINS_HOSTNAME
-      HOSTPORT: $JENKINS_MASTER_PORT
-      NUM_EXECUTORS: $JENKINS_NUM_EXECUTORS_LOCAL
-      ESGF_AUTH_USERNAME: $JENKINS_ESGF_AUTH_USERNAME
-      ESGF_AUTH_PASSWORD: $JENKINS_ESGF_AUTH_PASSWORD
-      ESGF_AUTH_TOKEN: $JENKINS_ESGF_AUTH_TOKEN
-      HYDROSHARE_AUTH_CLIENT_ID: $JENKINS_HYDROSHARE_AUTH_CLIENT_ID
-      HYDROSHARE_AUTH_TOKEN: $JENKINS_HYDROSHARE_AUTH_TOKEN
-      IS_PROD: $JENKINS_IS_PROD
-      ENABLE_SCHEDULED_TRIGGER: $JENKINS_ENABLE_SCHEDULED_TRIGGER
-      DEFAULT_PAVICS_HOST: $JENKINS_DEFAULT_PAVICS_HOST
-      DEFAULT_CONFIG_PARAMETERS_SCRIPT_URL: $DEFAULT_CONFIG_PARAMETERS_SCRIPT_URL
-      SMTP_HOST: $JENKINS_SMTP_HOST
+      ADMIN_PASSWD: ${JENKINS_ADMIN_PASSWD}
+      HTTP_PROTO: ${JENKINS_HTTP_PROTO}
+      HOSTNAME: ${JENKINS_HOSTNAME}
+      HOSTPORT: ${JENKINS_MASTER_PORT}
+      NUM_EXECUTORS: ${JENKINS_NUM_EXECUTORS_LOCAL}
+      MAX_CONCURRENT_JOBS: ${JENKINS_MAX_CONCURRENT_JOBS}
+      MAX_CONCURRENT_CATEGORY: ${JENKINS_MAX_CONCURRENT_CATEGORY}
+      ESGF_AUTH_USERNAME: ${JENKINS_ESGF_AUTH_USERNAME}
+      ESGF_AUTH_PASSWORD: ${JENKINS_ESGF_AUTH_PASSWORD}
+      ESGF_AUTH_TOKEN: ${JENKINS_ESGF_AUTH_TOKEN}
+      HYDROSHARE_AUTH_CLIENT_ID: ${JENKINS_HYDROSHARE_AUTH_CLIENT_ID}
+      HYDROSHARE_AUTH_TOKEN: ${JENKINS_HYDROSHARE_AUTH_TOKEN}
+      IS_PROD: ${JENKINS_IS_PROD}
+      ENABLE_SCHEDULED_TRIGGER: ${JENKINS_ENABLE_SCHEDULED_TRIGGER}
+      DEFAULT_PAVICS_HOST: ${JENKINS_DEFAULT_PAVICS_HOST}
+      DEFAULT_CONFIG_PARAMETERS_SCRIPT_URL: ${DEFAULT_CONFIG_PARAMETERS_SCRIPT_URL}
+      SMTP_HOST: ${JENKINS_SMTP_HOST}
       <<: *common-env
     links:
       - slave
@@ -46,15 +48,17 @@ services:
       <<: *default-logging
 
   slave:
-    image: pavics/jenkins-ssh-slave:190226
+    image: ${JENKINS_SSH_SLAVE_IMAGE}
     hostname: jenkins_slave
     volumes:
       - slave_home:/home/jenkins
       - ./jenkins-slave/entrypoint_slave:/entrypoint:ro
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      JENKINS_SLAVE_SSH_PUBKEY: $JENKINS_SLAVE_SSH_PUBKEY
-      DOCKER_GROUP_ON_HOST: $DOCKER_GROUP_ON_HOST
+      # use both variants such that any agent/slave source code will work
+      JENKINS_SLAVE_SSH_PUBKEY: ${JENKINS_SSH_SLAVE_PUBKEY}  # old name
+      JENKINS_AGENT_SSH_PUBKEY: ${JENKINS_SSH_AGENT_PUBKEY}  # new name
+      DOCKER_GROUP_ON_HOST: ${DOCKER_GROUP_ON_HOST}
       <<: *common-env
     restart: always
     logging:
@@ -64,9 +68,9 @@ services:
 volumes:
   master_home:
     external: true
-    name: jenkins_master_home_$JENKINS_MASTER_PORT
+    name: jenkins_master_home_${JENKINS_MASTER_PORT}
   slave_home:
     external: true
-    name: jenkins_slave_home_$JENKINS_MASTER_PORT
+    name: jenkins_slave_home_${JENKINS_MASTER_PORT}
 
 # vi: tabstop=8 expandtab shiftwidth=2 softtabstop=2

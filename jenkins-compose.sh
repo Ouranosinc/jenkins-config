@@ -1,13 +1,27 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 YELLOW=$(tput setaf 3)
 RED=$(tput setaf 1)
+BLUE=$(tput setaf 4)
 NORMAL=$(tput sgr0)
 
-# list of all variables to be substituted in templates
-VARS='$JENKINS_MASTER_PORT $SSH_PRIVATE_KEY $JENKINS_ADMIN_PASSWD $JENKINS_HTTP_PROTO $JENKINS_HOSTNAME $JENKINS_SLAVE_SSH_PUBKEY $JENKINS_NUM_EXECUTORS_LOCAL $JCASC_DIR'
+ERROR="${RED}ERROR${NORMAL}"
+WARN="${YELLOW}WARN${NORMAL}"
+INFO="${BLUE}INFO${NORMAL}"
 
-export DOCKER_GROUP_ON_HOST="`getent group |grep docker: | awk -F: '{print $3}'`"
+# list of all variables to be substituted in templates
+VARS='
+  $JENKINS_MASTER_IMAGE
+  $JENKINS_MASTER_PORT
+  $SSH_PRIVATE_KEY
+  $JENKINS_ADMIN_PASSWD
+  $JENKINS_HTTP_PROTO
+  $JENKINS_HOSTNAME
+  $JENKINS_SSH_SLAVE_IMAGE
+  $JENKINS_SSH_SLAVE_PUBKEY
+  $JENKINS_NUM_EXECUTORS_LOCAL
+  $JCASC_DIR
+'
 
 # we switch to the real directory of the script, so it still works when used from $PATH
 # tip: ln -s /path/to/pavics-compose.sh ~/bin/
@@ -17,19 +31,48 @@ cd $(dirname $(readlink -f $0 || realpath $0))
 # we don't use usual .env filename, because docker-compose uses it
 [[ -f env.local ]] && source env.local
 
+############################################################################
+# Handle deprecated/backward-compatible and default variables
+############################################################################
+
+# warning: always make sure to self-reference the variable before to allow sourcing with overrides
+
+# note: the 'SSH' and 'SLAVE' are purposely swapped below to match the legacy name
+export JENKINS_SLAVE_SSH_PUBKEY=${JENKINS_SLAVE_SSH_PUBKEY:-${JENKINS_SSH_AGENT_PUBKEY}}
+export JENKINS_SSH_SLAVE_PUBKEY=${JENKINS_SSH_SLAVE_PUBKEY:-${JENKINS_SLAVE_SSH_PUBKEY}}
+
+# new variables for convenience/alignment of older 'ssh-slave' naming
+# note: for legacy reasons, the '..._SSH_SLAVE_...' names can also be used
+export JENKINS_SSH_AGENT_VERSION=${JENKINS_SSH_AGENT_VERSION:-${JENKINS_SSH_SLAVE_VERSION}}
+export JENKINS_SSH_AGENT_DOCKER=${JENKINS_SSH_AGENT_DOCKER:-${JENKINS_SSH_SLAVE_DOCKER}}
+export JENKINS_SSH_AGENT_IMAGE=${JENKINS_SSH_AGENT_IMAGE:-${JENKINS_SSH_SLAVE_IMAGE}}
+
+# use "ssh-slave" repository to push in same location as older versions
+export JENKINS_SSH_SLAVE_DOCKER=${JENKINS_SSH_AGENT_DOCKER:-pavics/jenkins-ssh-slave}
+export JENKINS_SSH_SLAVE_VERSION=${JENKINS_SSH_AGENT_VERSION:-251211}
+export JENKINS_SSH_SLAVE_IMAGE=${JENKINS_SSH_AGENT_IMAGE:-"${JENKINS_SSH_SLAVE_DOCKER}:${JENKINS_SSH_SLAVE_VERSION}"}
+
+export JENKINS_MASTER_DOCKER=${JENKINS_MASTER_DOCKER:-pavics/jenkins-master}
+export JENKINS_MASTER_VERSION=${JENKINS_MASTER_VERSION:-2.528.3.251211}
+export JENKINS_MASTER_IMAGE=${JENKINS_MASTER_IMAGE:-"${JENKINS_MASTER_DOCKER}:${JENKINS_MASTER_VERSION}"}
+
+############################################################################
+# Validate required variables and set extra options
+############################################################################
+
 for i in $VARS
 do
   v="${i#$}"
   if [[ -z "${!v}" ]]
   then
-    echo "${RED}Error${NORMAL}: Required variable $v is not set. Check env.local file."
+    echo "${ERROR}: Required variable $v is not set. Check env.local file."
     exit
   fi
 done
 
 if [[ ! -f docker-compose.yml ]]
 then
-  echo "Error, this script must be ran from the folder containing the docker-compose.yml file"
+  echo "${ERROR}: this script must be ran from the folder containing the docker-compose.yml file"
   exit 1
 fi
 
@@ -44,7 +87,7 @@ if [[ $1 == "up" || $1 == "restart" ]]; then
     if [ -d "$adir" ]; then
       cp -v $adir/*.yaml $CASC_JENKINS_CONFIG/
     else
-      echo "${YELLOW}Warn${NORMAL}: JCASC extra dir '$adir' do not exist."
+      echo "${WARN}: JCASC extra dir '$adir' do not exist."
     fi
   done
 fi
@@ -86,7 +129,7 @@ set +x
 type post-compose 2>&1 | grep 'post-compose is a function' > /dev/null
 if [[ $? -eq 0 ]]
 then
-  [[ $ERR -gt 0 ]] && { echo "Error occurred with docker-compose, not running post-compose"; exit $?; }
+  [[ $ERR -gt 0 ]] && { echo "${ERROR}: occurred with docker-compose, not running post-compose"; exit $?; }
   post-compose "$@"
 fi
 
