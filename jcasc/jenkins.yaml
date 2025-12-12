@@ -78,6 +78,15 @@ security:
 unclassified:
   location:
     url: "${HTTP_PROTO}://${HOSTNAME}:${HOSTPORT}/"  # Env var
+  throttleJobProperty:
+    # https://plugins.jenkins.io/throttle-concurrents/#plugin-content-global-configuration
+    categories:
+    - categoryName: "daccs-e2e"
+      maxConcurrentTotal: 0
+      maxConcurrentPerNode: ${MAX_CONCURRENT_JOBS}
+      nodeLabeledPairs:
+      - throttledNodeLabel: "docker"
+        maxConcurrentPerNodeLabeled: 1
 tool:
   git:
     installations:
