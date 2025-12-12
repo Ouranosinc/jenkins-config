@@ -104,6 +104,20 @@ if [ -z "$JENKINS_DEFAULT_PAVICS_HOST" ]; then
   export JENKINS_DEFAULT_PAVICS_HOST="pavics.ouranos.ca"
 fi
 
+# handle root vs rootless docker
+export DOCKER_SOCKET_ON_HOST=${DOCKER_SOCKET_ON_HOST:-/var/run/docker.sock}
+if [[ ! -S "${DOCKER_SOCKET_ON_HOST}" ]] && [[ "${DOCKER_SOCKET_ON_HOST}" = "/var/run/docker.sock" ]]; then
+    echo "${WARN}: missing root docker socket '$DOCKER_SOCKET_ON_HOST'. Attempt fallback rootless socket."
+    export DOCKER_SOCKET_ON_HOST=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/docker.sock
+fi
+if [ ! -S "${DOCKER_SOCKET_ON_HOST}" ]; then
+  echo "${ERROR}: docker socket '${DOCKER_SOCKET_ON_HOST}' not found or is not a socket!"
+  exit 1
+fi
+
+export DOCKER_GROUP_ON_HOST=${DOCKER_GROUP_ON_HOST:-$(stat -c '%g' "${DOCKER_SOCKET_ON_HOST}")}
+echo "${INFO}: Using docker socket [${DOCKER_SOCKET_ON_HOST}] with GID [${DOCKER_GROUP_ON_HOST}]"
+
 # we apply all the templates
 #find . -name '*.template' -print0 |
 #  while IFS= read -r -d $'\0' FILE
