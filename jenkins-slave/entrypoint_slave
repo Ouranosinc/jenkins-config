@@ -13,9 +13,9 @@
 
 if [ -n "$DOCKER_GROUP_ON_HOST" ]; then
 
-    # create a new group with the same id as the docker group on the original
-    # host
-    addgroup --gid $DOCKER_GROUP_ON_HOST docker_from_host
+    # create a new group with the same id as the docker group on the original host
+    # NOTE: *edit from upstream*  don't let it fail, actually patch it!
+    addgroup --gid $DOCKER_GROUP_ON_HOST docker_from_host || true
 
     # in the case when the docker group gid is the same on the host and in the
     # container, the previous command will fail, because the group already exists.
@@ -26,6 +26,16 @@ if [ -n "$DOCKER_GROUP_ON_HOST" ]; then
     # jenkins can launch docker containers using the docker daemon on the
     # original host
     usermod -G "$docker_group_name" -a jenkins
+
+    # since this entrypoint script is volume-mounted and invoked afterwards,
+    # any applicable group ID remapping between host/docker would have already happened
+    # this is a typical behavior of rootless mode that uses other tools (subuid/subgid)
+    # therefore, if the GID is still not aligned with the host's docker group GID,
+    # while the 'addgroup' failed due to conflict, we need to add the user to the group again
+    # in other cases, it is simply no-op / redundant of the previous group assignation
+    GID=$(stat -c "%g" /var/run/docker.sock)
+    alt_group_name=$(getent group "$GID" | cut -d ':' -f1)
+    adduser jenkins "${alt_group_name}"
 fi
 
 # finally call the same entrypoint as the original base image
