@@ -8,7 +8,8 @@ x-common-env: &common-env
   # For error "process apparently never started in
   # /home/jenkins/agent/workspace/_workflow-tests_new-docker-build@tmp/durable-12eaff4f"
   # on RockyLinux9 (RL8 was fine)
-  JAVA_OPTS: -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS=true
+  # Disabling the setup wizard avoids the startup screen asking for new plugins installation
+  JAVA_OPTS: -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS=true -Djenkins.install.runSetupWizard=false
 
 
 services:
