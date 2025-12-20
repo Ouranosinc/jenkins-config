@@ -41,6 +41,7 @@ cd $(dirname $(readlink -f $0 || realpath $0))
 # note: the 'SSH' and 'SLAVE' are purposely swapped below to match the legacy name
 export JENKINS_SLAVE_SSH_PUBKEY=${JENKINS_SLAVE_SSH_PUBKEY:-${JENKINS_SSH_AGENT_PUBKEY}}
 export JENKINS_SSH_SLAVE_PUBKEY=${JENKINS_SSH_SLAVE_PUBKEY:-${JENKINS_SLAVE_SSH_PUBKEY}}
+export JENKINS_SSH_AGENT_PUBKEY=${JENKINS_SSH_AGENT_PUBKEY:-${JENKINS_SSH_SLAVE_PUBKEY}}
 
 # new variables for convenience/alignment of older 'ssh-slave' naming
 # note: for legacy reasons, the '..._SSH_SLAVE_...' names can also be used
