@@ -21,6 +21,7 @@ VARS='
   $JENKINS_SSH_SLAVE_PUBKEY
   $JENKINS_NUM_EXECUTORS_LOCAL
   $JCASC_DIR
+  $JCASC_CATEGORY_NAME
 '
 
 # we switch to the real directory of the script, so it still works when used from $PATH

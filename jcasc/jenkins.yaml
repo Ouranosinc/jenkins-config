@@ -81,7 +81,7 @@ unclassified:
   throttleJobProperty:
     # https://plugins.jenkins.io/throttle-concurrents/#plugin-content-global-configuration
     categories:
-    - categoryName: "daccs-e2e"
+    - categoryName: "${JCASC_CATEGORY_NAME}"
       maxConcurrentTotal: 0
       maxConcurrentPerNode: ${MAX_CONCURRENT_JOBS}
       # could use labels to further customize concurrency per node
