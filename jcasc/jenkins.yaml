@@ -84,9 +84,12 @@ unclassified:
     - categoryName: "daccs-e2e"
       maxConcurrentTotal: 0
       maxConcurrentPerNode: ${MAX_CONCURRENT_JOBS}
-      nodeLabeledPairs:
-      - throttledNodeLabel: "docker"
-        maxConcurrentPerNodeLabeled: 1
+      # could use labels to further customize concurrency per node
+      # however, only one node is defined for now, so not needed
+      # leaving definition for quick reference if needed in future
+      # nodeLabeledPairs:
+      # - throttledNodeLabel: "docker"
+      #   maxConcurrentPerNodeLabeled: 1
 tool:
   git:
     installations:
